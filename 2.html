@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>AI貸超人</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700&family=Roboto+Slab:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            background-color: #ffffff; /* 白色背景 */
+            margin: 0; 
+            padding: 20px; 
+        }
+        .container { 
+            display: flex; 
+            max-width: 1200px; 
+            margin: auto; 
+            gap: 20px; 
+        }
+        .input-section, .result-section { 
+            flex: 1; 
+            padding: 20px; 
+            background: #e8f5e9; /* 淺綠背景 */
+            border-radius: 8px; 
+            box-shadow: 0 0 10px rgba(0,0,0,0.1); 
+            border: 1px solid #d4af37; /* 金色邊框 */
+            box-sizing: border-box;
+        }
+        label { 
+            display: block; 
+            margin: 10px 0; 
+            font-weight: bold; 
+            color: #1b5e20; /* 深綠文字 */
+        }
+        input[type="number"], input[type="text"] { 
+            width: 100%; 
+            padding: 8px; 
+            margin-bottom: 10px; 
+            border: 1px solid #d4af37; /* 金色邊框 */
+            border-radius: 4px; 
+            box-sizing: border-box; 
+        }
+        button { 
+            padding: 10px 20px; 
+            background-color: #2e7d32; /* 深綠按鈕 */
+            color: white; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
+        }
+        button:hover { 
+            background-color: #1b5e20; /* 稍暗的深綠懸停 */
+        }
+        h1 { 
+            font-family: 'Noto Serif TC', serif; /* 優化字型 */
+            font-weight: 700; 
+            font-size: 2.5em; 
+            color: #8b0000; /* 酒紅標題 */
+            text-align: center; 
+            margin-bottom: 10px; 
+            border-bottom: 2px solid #d4af37; /* 金色邊框 */
+        }
+        h2, h3 { 
+            color: #1b5e20; /* 深綠其他標題 */
+            text-align: center; 
+        }
+        h2 { 
+            margin-bottom: 20px; 
+        }
+        h3 { 
+            margin-bottom: 15px; 
+        }
+        #result p { 
+            color: #1b5e20; /* 深綠文字 */
+        }
+    </style>
+</head>
+<body>
+    <h1>AI貸超人</h1>
+    <h2>土地公超人守護您的購屋夢想！</h2>
+
+    <div class="container">
+        <div class="input-section">
+            <h3>土地公神算輸入</h3>
+            <form>
+                <label for="address">成交物件地址：</label>
+                <input type="text" id="address">
+
+                <label><input type="checkbox" id="is_taipei"> 位於台北市</label>
+                <label><input type="checkbox" id="is_new_taipei_mrt"> 位於新北市但距離捷運站一千公尺以內</label>
+                <label><input type="checkbox" id="is_tsb_batch"> 成交物件為土銀分戶貸款</label>
+
+                <label for="credit_balance">已有信用貸款餘額（元）：</label>
+                <input type="number" id="credit_balance" value="0" min="0">
+
+                <label for="house_loan_balance">已有房屋貸款餘額（元）：</label>
+                <input type="number" id="house_loan_balance" value="0" min="0">
+
+                <label><input type="checkbox" id="has_house_12ping"> 已有房屋且所持持份達12坪</label>
+                <label><input type="checkbox" id="has_2_plus"> 已有2戶含以上購屋房貸</label>
+                <label><input type="checkbox" id="is_change_house"> 為換屋</label>
+
+                <label for="annual_income">總年收入金額（元）：</label>
+                <input type="number" id="annual_income" min="0">
+
+                <label><input type="checkbox" id="has_tax_record"> 所填總年收均有最新報稅紀錄</label>
+
+                <label for="transaction_price">成交價（元）：</label>
+                <input type="number" id="transaction_price" min="0">
+
+                <label><input type="checkbox" id="is_reasonable_price"> 確認確為該區域合理價</label>
+                <label><input type="checkbox" id="is_self_use"> 為自住使用</label>
+
+                <label for="area_ping">不含車位登記面積（坪）：</label>
+                <input type="number" id="area_ping" min="0">
+
+                <button type="button" onclick="calculate()">🌾 土地公神算</button>
+            </form>
+        </div>
+
+        <div class="result-section">
+            <h3>神算結果</h3>
+            <div id="result">
+                <p>請填寫左側資料，讓土地公超人為您神算最佳房貸方案！</p>
+                <p>⛩️</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calculate() {
+            // 獲取輸入值
+            const address = document.getElementById('address').value;
+            const is_taipei = document.getElementById('is_taipei').checked;
+            const is_new_taipei_mrt = document.getElementById('is_new_taipei_mrt').checked;
+            const is_tsb_batch = document.getElementById('is_tsb_batch').checked;
+            const credit_balance = parseFloat(document.getElementById('credit_balance').value) || 0;
+            let house_loan_balance = parseFloat(document.getElementById('house_loan_balance').value) || 0;
+            let has_house_12ping = document.getElementById('has_house_12ping').checked;
+            let has_2_plus = document.getElementById('has_2_plus').checked;
+            const is_change_house = document.getElementById('is_change_house').checked;
+            const annual_income = parseFloat(document.getElementById('annual_income').value) || 0;
+            const has_tax_record = document.getElementById('has_tax_record').checked;
+            const transaction_price = parseFloat(document.getElementById('transaction_price').value) || 0;
+            const is_reasonable_price = document.getElementById('is_reasonable_price').checked;
+            const is_self_use = document.getElementById('is_self_use').checked;
+            const area_ping = parseFloat(document.getElementById('area_ping').value) || 0;
+
+            if (annual_income <= 0 || transaction_price <= 0) {
+                document.getElementById('result').innerHTML = '請輸入有效的總年收入和成交價。';
+                return;
+            }
+
+            // 若勾選為換屋，房屋貸款餘額重置為零，且視為無勾選「已有房屋且所持持份達12坪」及「已有2戶含以上購屋房貸」
+            if (is_change_house) {
+                house_loan_balance = 0;
+                has_house_12ping = false;
+                has_2_plus = false;
+            }
+
+            const special_address = is_taipei || is_new_taipei_mrt;
+            const existing_debt = credit_balance + house_loan_balance;
+
+            // 計算假設 LTV=0.8 下的負債比
+            const assume_loan = transaction_price * 0.8;
+            const assume_total_debt = existing_debt + assume_loan;
+            const assume_debt_ratio = assume_total_debt / annual_income;
+
+            let ltv;
+            let initial_ltv; // 用於檢查是否單純因條件一導致成數降低
+            if (special_address) {
+                ltv = 0.8;
+            } else if (annual_income > 1200000 && assume_debt_ratio <= 12) {
+                ltv = 0.8;
+            } else if (annual_income > 600000 && assume_debt_ratio <= 8) {
+                ltv = 0.8;
+            } else {
+                ltv = 0.75;
+            }
+            initial_ltv = ltv; // 儲存初始成數
+
+            // 應用最高限制
+            let warnings = [
+                '試算僅供參考(尤以徵信可用收入仍需另評估例如育兒、信用卡分期等等支出)',
+                '請務必確認確為該區域合理價'
+            ];
+            // 條件六：房屋貸款餘額不為零 或 已有房屋且所持持份達12坪，最高七成
+            if (house_loan_balance > 0 || has_house_12ping) {
+                ltv = Math.min(ltv, 0.7);
+            }
+            // 條件七：已有2戶以上購屋房貸，最高三成
+            if (has_2_plus) {
+                ltv = Math.min(ltv, 0.3);
+                warnings.push('央行管控第3戶');
+            }
+            // 條件八：房屋貸款餘額不為零 且 未勾選為換屋，最高五成
+            if (house_loan_balance > 0 && !is_change_house) {
+                ltv = Math.min(ltv, 0.5);
+                warnings.push('央行管控第2戶');
+            }
+            // 條件九：已有房屋且所持持份達12坪 且 未勾選換屋 且 房屋貸款餘額為零，最高七成
+            if (has_house_12ping && !is_change_house && house_loan_balance === 0) {
+                ltv = Math.min(ltv, 0.7);
+            }
+
+            // 年金支付函數 (年度支付)
+            function annual_payment(amount, years, rate) {
+                if (amount === 0 || years === 0) return 0;
+                const r = rate;
+                const n = years;
+                return amount * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+            }
+
+            // 計算既有貸款年度償還額
+            const credit_annual = annual_payment(credit_balance, 7, 0.03);
+            const house_annual = annual_payment(house_loan_balance, 30, 0.03);
+            const available = annual_income - 250000 - credit_annual - house_annual;
+
+            // 調整 LTV 以滿足償還條件
+            let loan_amount = transaction_price * ltv;
+            let loan_annual = annual_payment(loan_amount, 30, 0.03);
+            let adjusted_due_to_condition_1 = false;
+            if (loan_annual > available) {
+                adjusted_due_to_condition_1 = true;
+                while (loan_annual > available && ltv > 0) {
+                    ltv -= 0.005; // 每次降低 0.5%
+                    loan_amount = transaction_price * ltv;
+                    loan_annual = annual_payment(loan_amount, 30, 0.03);
+                }
+            }
+
+            // 最終計算
+            const total_debt = existing_debt + loan_amount;
+            const debt_ratio = total_debt / annual_income;
+
+            // 其他警語
+            if (!is_self_use) {
+                warnings.push('請務必詢問行員非自住使用可否貸款');
+            }
+            if (area_ping < 15) {
+                warnings.push('請詢問行員套房規定');
+            }
+            if (transaction_price > 49000000) {
+                warnings.push('請詢問行員高價住宅規定');
+            }
+            if (is_tsb_batch) {
+                warnings.push('請告知行員為整批分戶房貸');
+            }
+            if (is_change_house) {
+                warnings.push('後續請依規協處舊換新');
+            }
+            const margin = available - loan_annual;
+            if (margin > 0 && margin / available < 0.05) { // 少於5% 餘裕
+                warnings.push('餘絀緊繃若未增提有餘絀保人將導致成數可能存在誤差3%~5%');
+            }
+            if (adjusted_due_to_condition_1) {
+                warnings.push('若成數不符您預期 建議增提有餘絀之保證人可改善');
+            }
+            if (!has_tax_record) {
+                warnings.push('年收無報稅資料請務必先行提供如近一年收入交易明細或所營事業401表詢問行員');
+            }
+
+            // 輸出結果
+            let output = `
+                <p><strong>房貸成數：</strong> ${(ltv * 100).toFixed(2)}%</p>
+                <p><strong>貸款金額：</strong> ${loan_amount.toFixed(0)}</p>
+                <p><strong>負債比：</strong> ${debt_ratio.toFixed(2)}</p>
+                <p><strong>粗估每年房貸償還額（本息，利息以3%計算）：</strong> ${loan_annual.toFixed(0)}</p>
+                <p><strong>粗估徵信可用收入（扣除既有償還及25萬後）：</strong> ${available.toFixed(0)}</p>
+                <p><strong>利率：</strong> 一、新青安貸款利率補貼期過後：2.275%起 二、公教2.31%起 三、土銀分戶貸款首購2.475%~2.805% 四、其餘首購3.25%起 。 請諮詢行員所適用利率</p>
+                <p><strong>貸款年限：</strong> 一、新青安貸款最長40年 二、其餘20~30年 。 請提供年齡資訊諮詢行員</p>
+                <p><strong>寬限期：</strong> 一、新青安貸款最長5年 二、其餘0~3年 。 若有需求請詢問行員寬限期規定</p>
+            `;
+            if (warnings.length > 0) {
+                output += `<p><strong>警語：</strong><br>${warnings.join('<br>')}</p>`;
+            }
+
+            document.getElementById('result').innerHTML = output;
+        }
+    </script>
+</body>
+</html>
